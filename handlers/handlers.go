@@ -79,6 +79,7 @@ func ProcesoCategory(body string, path string, method string, user string, id in
 		return routers.InsertCategory(body, user)
 	}
 
+	fmt.Println("Method = " + method)
 	return 400, "Method Invalid"
 }
 
