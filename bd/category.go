@@ -4,9 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strconv"
-
-	//	"strconv"
-	//	"strings"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/ptilotta/gambit/models"
@@ -41,7 +39,7 @@ func InsertCategory(c models.Category) (int64, error) {
 }
 
 func UpdateCategory(c models.Category) error {
-	fmt.Println("Comienza UPDATE de Category")
+	fmt.Println("Comienza Registro de UpdateCategory")
 
 	err := DbConnect()
 	if err != nil {
@@ -49,8 +47,20 @@ func UpdateCategory(c models.Category) error {
 	}
 	defer Db.Close()
 
-	sentencia := "UPDATE category SET Categ_Name = '" + tools.EscapeString(c.CategName) + "', Categ_Path = '" +
-		tools.EscapeString(c.CategPath) + "' WHERE Categ_Id = " + strconv.Itoa(c.CategID)
+	sentencia := "UPDATE category SET "
+
+	if len(c.CategName) > 0 {
+		sentencia += " Categ_Name = '" + tools.EscapeString(c.CategName) + "'"
+	}
+
+	if len(c.CategPath) > 0 {
+		if !strings.HasSuffix(sentencia, "SET ") {
+			sentencia += ", "
+		}
+		sentencia += "Categ_Path = '" + tools.EscapeString(c.CategPath) + "'"
+	}
+
+	sentencia += " WHERE Categ_Id = " + strconv.Itoa(c.CategID)
 
 	_, err = Db.Exec(sentencia)
 	if err != nil {
