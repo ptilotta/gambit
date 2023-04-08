@@ -19,7 +19,7 @@ func InsertProduct(p models.Product) (int64, error) {
 	}
 	defer Db.Close()
 
-	sentencia := "INSERT INTO productos (Prod_Title "
+	sentencia := "INSERT INTO product (Prod_Title "
 
 	if len(p.ProdDescription) > 0 {
 		sentencia += ", Prod_Description"
