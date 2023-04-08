@@ -68,6 +68,7 @@ func UpdateCategory(c models.Category) error {
 		return err
 	}
 
+	fmt.Println(sentencia)
 	fmt.Println("Update Category > Ejecución Exitosa")
 	return nil
 }
