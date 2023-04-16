@@ -105,7 +105,7 @@ func ProcesoStock(body string, path string, method string, user string, id int, 
 }
 
 func ProcesoAddress(body string, path string, method string, user string, id int, request events.APIGatewayV2HTTPRequest) (int, string) {
-	return 400, "Method Invalid"
+	return routers.UpdateStock(body, user, id)
 }
 
 func ProcesoOrder(body string, path string, method string, user string, id int, request events.APIGatewayV2HTTPRequest) (int, string) {
