@@ -53,7 +53,7 @@ func UpdateProduct(body string, User string, id int) (int, string) {
 	t.ProdId = id
 	err2 := bd.UpdateProduct(t)
 	if err2 != nil {
-		return 400, "Ocurrio un error al intentar realizar el UPDATE del producto " + strconv.Itoa(id) + " > " + err.Error()
+		return 400, "Ocurrio un error al intentar realizar el UPDATE del producto " + strconv.Itoa(id) + " > " + err2.Error()
 	}
 
 	return 200, "Update OK"
@@ -126,4 +126,26 @@ func SelectProduct(request events.APIGatewayV2HTTPRequest) (int, string) {
 	}
 
 	return 200, string(Product)
+}
+
+func UpdateStock(body string, User string, id int) (int, string) {
+	var t models.Product
+
+	err := json.Unmarshal([]byte(body), &t)
+	if err != nil {
+		return 400, "Error en los datos recibidos " + err.Error()
+	}
+
+	isAdmin, msg := bd.UserIsAdmin(User)
+	if !isAdmin {
+		return 400, msg
+	}
+
+	t.ProdId = id
+	err2 := bd.UpdateStock(t)
+	if err2 != nil {
+		return 400, "Ocurrio un error al intentar realizar el UPDATE del stock " + strconv.Itoa(id) + " > " + err2.Error()
+	}
+
+	return 200, "Update OK"
 }
