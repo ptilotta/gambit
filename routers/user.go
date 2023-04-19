@@ -2,6 +2,7 @@ package routers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/ptilotta/gambit/bd"
 	"github.com/ptilotta/gambit/models"
@@ -30,4 +31,24 @@ func UpdateUser(body string, User string) (int, string) {
 	}
 
 	return 200, "UpdateUser OK"
+}
+
+func SelectUser(body string, User string) (int, string) {
+	_, encontrado := bd.UserExists(User)
+	if !encontrado {
+		return 400, "No existe un usuario con ese UUID '" + User + "'"
+	}
+
+	row, err := bd.SelectUser(User)
+	fmt.Println(row)
+	if err != nil {
+		return 400, "Ocurrió un error al intentar realizar el Select del usuario " + User + " > " + err.Error()
+	}
+
+	respJson, err := json.Marshal(row)
+	if err != nil {
+		return 500, "Error al formatear los datos del usuario como JSON"
+	}
+
+	return 200, string(respJson)
 }
