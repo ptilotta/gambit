@@ -76,6 +76,11 @@ func ProcesoUsers(body string, path string, method string, user string, id strin
 			return routers.SelectUser(body, user)
 		}
 	}
+	if path == "users" {
+		if method == "GET" {
+			return routers.SelectUsers(body, user, request)
+		}
+	}
 
 	return 400, "Method Invalid"
 }

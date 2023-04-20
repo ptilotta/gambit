@@ -48,3 +48,8 @@ type User struct {
 	UserDateAdd   string `json:"userDateAdd"`
 	UserDateUpd   string `json:"userDateUpd"`
 }
+
+type ListUsers struct {
+	TotalItems int    `json:"totalItems"`
+	Data       []User `json:"data"`
+}

@@ -3,6 +3,9 @@ package routers
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+
+	"github.com/aws/aws-lambda-go/events"
 
 	"github.com/ptilotta/gambit/bd"
 	"github.com/ptilotta/gambit/models"
@@ -48,6 +51,33 @@ func SelectUser(body string, User string) (int, string) {
 	respJson, err := json.Marshal(row)
 	if err != nil {
 		return 500, "Error al formatear los datos del usuario como JSON"
+	}
+
+	return 200, string(respJson)
+}
+
+func SelectUsers(body string, User string, request events.APIGatewayV2HTTPRequest) (int, string) {
+
+	var Page int
+	if len(request.QueryStringParameters["page"]) == 0 {
+		Page = 1
+	} else {
+		Page, _ = strconv.Atoi(request.QueryStringParameters["page"])
+	}
+
+	isAdmin, msg := bd.UserIsAdmin(User)
+	if !isAdmin {
+		return 400, msg
+	}
+
+	user, err := bd.SelectUsers(Page)
+	if err != nil {
+		return 400, "Ocurrió un error al intentar obtener la lista de usuarios > " + err.Error()
+	}
+
+	respJson, err := json.Marshal(user)
+	if err != nil {
+		return 500, "Error al formatear los datos de los usuarios como JSON"
 	}
 
 	return 200, string(respJson)
