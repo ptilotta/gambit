@@ -124,6 +124,8 @@ func ProcesoAddress(body string, path string, method string, user string, id int
 		return routers.InsertAddress(body, user)
 	case "PUT":
 		return routers.UpdateAddress(body, user, id)
+	case "DELETE":
+		return routers.DeleteAddress(user, id)
 	}
 	return routers.UpdateStock(body, user, id)
 }
